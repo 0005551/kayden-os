@@ -1,0 +1,3633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAYDEN OS</title>
+    <style>
+        /* ============================================
+           KAYDEN OS — MASTER STYLESHEET
+           ============================================ */
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: #16161f;
+            --bg-card-hover: #1c1c28;
+            --bg-input: #1a1a25;
+            --border: #2a2a3a;
+            --border-hover: #3a3a50;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --text-muted: #555570;
+            --accent-red: #dc3545;
+            --accent-red-glow: rgba(220, 53, 69, 0.3);
+            --accent-red-dim: rgba(220, 53, 69, 0.1);
+            --accent-purple: #8b5cf6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.3);
+            --accent-purple-dim: rgba(139, 92, 246, 0.1);
+            --accent-green: #22c55e;
+            --accent-green-glow: rgba(34, 197, 94, 0.3);
+            --accent-amber: #f59e0b;
+            --accent-amber-glow: rgba(245, 158, 11, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --shadow-glow-red: 0 0 30px rgba(220, 53, 69, 0.15);
+            --shadow-glow-purple: 0 0 30px rgba(139, 92, 246, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+        /* ============================================
+           SIDEBAR NAVIGATION
+           ============================================ */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 72px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .sidebar-logo {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-logo:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .nav-item {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transform: translateX(2px);
+        }
+
+        .nav-item.active {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        .nav-item .tooltip {
+            position: absolute;
+            left: 62px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .nav-item:hover .tooltip {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+        .main-content {
+            margin-left: 72px;
+            min-height: 100vh;
+            padding: 24px;
+            max-width: 1400px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(220, 53, 69, 0.25); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .greeting-time {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ============================================
+           CARDS
+           ============================================ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: var(--transition);
+            animation: slideUp 0.4s ease backwards;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .card-glow-red:hover {
+            box-shadow: var(--shadow-glow-red);
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+
+        .card-glow-purple:hover {
+            box-shadow: var(--shadow-glow-purple);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .icon {
+            font-size: 18px;
+        }
+
+        /* ============================================
+           GRID LAYOUTS
+           ============================================ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .grid-auto {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* ============================================
+           TODAY SCREEN — DAILY SCORE
+           ============================================ */
+        .daily-score-ring {
+            width: 140px;
+            height: 140px;
+            position: relative;
+            margin: 0 auto 16px;
+        }
+
+        .daily-score-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .daily-score-ring .ring-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .daily-score-ring .ring-fill {
+            fill: none;
+            stroke: url(#scoreGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 377;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .daily-score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .daily-score-value .number {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .daily-score-value .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================
+           FOCUS INPUT
+           ============================================ */
+        .focus-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .focus-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .focus-input:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px var(--accent-red-dim);
+        }
+
+        .focus-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           TASKS
+           ============================================ */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            border-color: var(--border-hover);
+            transform: translateX(4px);
+        }
+
+        .task-item.completed {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+
+        .task-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--border-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .task-item.completed .task-checkbox {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .task-points {
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ============================================
+           HABITS
+           ============================================ */
+        .habits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .habit-btn {
+            padding: 16px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-btn .habit-icon {
+            font-size: 24px;
+        }
+
+        .habit-btn:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .habit-btn.done {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: var(--accent-green);
+        }
+
+        .habit-btn.done::after {
+            content: '✓';
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .habit-btn .hold-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-green);
+            width: 0;
+            transition: width 0.8s linear;
+        }
+
+        .habit-btn.holding .hold-progress {
+            width: 100%;
+        }
+
+        /* ============================================
+           PROGRESS BAR
+           ============================================ */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-input);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-purple));
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ============================================
+           STAT CARDS
+           ============================================ */
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .stat-red .stat-value { color: var(--accent-red); }
+        .stat-purple .stat-value { color: var(--accent-purple); }
+        .stat-green .stat-value { color: var(--accent-green); }
+        .stat-amber .stat-value { color: var(--accent-amber); }
+
+        /* ============================================
+           AI CHAT
+           ============================================ */
+        .ai-chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 160px);
+            max-height: 700px;
+        }
+
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ai-message {
+            display: flex;
+            gap: 12px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .ai-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .ai-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .ai-message.assistant .ai-avatar {
+            background: linear-gradient(135deg, var(--accent-red-dim), var(--accent-purple-dim));
+            border: 1px solid var(--accent-red);
+        }
+
+        .ai-message.user .ai-avatar {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+        }
+
+        .ai-bubble {
+            max-width: 70%;
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-message.assistant .ai-bubble {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .ai-message.user .ai-bubble {
+            background: var(--accent-red-dim);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .ai-input-bar {
+            display: flex;
+            gap: 10px;
+            padding: 16px 0 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .ai-input-bar input {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .ai-input-bar input:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px var(--accent-red-dim);
+        }
+
+        .ai-send-btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ai-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        /* ============================================
+           JOB CORPS
+           ============================================ */
+        .progress-tracker {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-item-label {
+            width: 140px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .progress-item-bar {
+            flex: 1;
+            height: 10px;
+            background: var(--bg-input);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-item-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+
+        .progress-item-value {
+            width: 45px;
+            text-align: right;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ============================================
+           CAREER PATH CARDS
+           ============================================ */
+        .career-card {
+            padding: 28px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .career-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-purple));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .career-card:hover::before {
+            opacity: 1;
+        }
+
+        .career-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .career-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .career-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .career-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .skill-tag {
+            padding: 4px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           CAREER DETAIL VIEW
+           ============================================ */
+        .career-detail {
+            display: none;
+        }
+
+        .career-detail.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 24px;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .lesson-card {
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .lesson-card .lesson-number {
+            font-size: 11px;
+            color: var(--accent-purple);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 4px;
+        }
+
+        .lesson-card .lesson-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .lesson-card .lesson-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .lesson-card .lesson-status {
+            margin-top: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lesson-card .lesson-status.completed {
+            color: var(--accent-green);
+        }
+
+        .lesson-card .lesson-status.in-progress {
+            color: var(--accent-amber);
+        }
+
+        .lesson-card .lesson-status.locked {
+            color: var(--text-muted);
+        }
+
+        .lesson-content {
+            display: none;
+            padding: 24px;
+            margin-top: 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .lesson-content.open {
+            display: block;
+        }
+
+        .lesson-content h3 {
+            color: var(--text-primary);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .lesson-content p {
+            margin-bottom: 12px;
+        }
+
+        .lesson-content .key-point {
+            padding: 12px 16px;
+            background: var(--accent-purple-dim);
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .mark-complete-btn {
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-green), #16a34a);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mark-complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--accent-green-glow);
+        }
+
+        /* ============================================
+           MONEY TRACKER
+           ============================================ */
+        .money-total {
+            font-size: 48px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 20px 0 8px;
+        }
+
+        .money-label {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .transaction-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .transaction-icon.income {
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .transaction-icon.expense {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .transaction-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .transaction-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .transaction-amount {
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .transaction-amount.positive {
+            color: var(--accent-green);
+        }
+
+        .transaction-amount.negative {
+            color: var(--accent-red);
+        }
+
+        /* ============================================
+           RELATIONSHIP SECTION
+           ============================================ */
+        .rel-lock-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .rel-lock-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            animation: pulseGlow 3s infinite;
+        }
+
+        .rel-lock-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .rel-lock-sub {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .rel-pin-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .rel-pin-input input {
+            width: 52px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .rel-pin-input input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 20px var(--accent-purple-dim);
+        }
+
+        .rel-unlock-btn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .rel-unlock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-purple);
+        }
+
+        .rel-content {
+            display: none;
+        }
+
+        .rel-content.unlocked {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .rel-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            padding: 4px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .rel-tab {
+            flex: 1;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .rel-tab.active {
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+        }
+
+        .rel-tab:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        .rel-tab-content {
+            display: none;
+        }
+
+        .rel-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .checkin-option {
+            padding: 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .checkin-option:hover {
+            border-color: var(--accent-purple);
+            background: var(--accent-purple-dim);
+        }
+
+        .checkin-option.selected {
+            border-color: var(--accent-purple);
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+        }
+
+        .memory-entry {
+            padding: 16px;
+            background: var(--bg-input);
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 12px;
+        }
+
+        .memory-entry .memory-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 6px;
+        }
+
+        .memory-entry .memory-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           ADD FORMS
+           ============================================ */
+        .inline-add {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .inline-add input {
+            flex: 1;
+            padding: 10px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .inline-add input:focus {
+            border-color: var(--accent-red);
+        }
+
+        .inline-add button {
+            padding: 10px 16px;
+            background: var(--accent-red-dim);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            border-radius: var(--radius-sm);
+            color: var(--accent-red);
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+            line-height: 1;
+        }
+
+        .inline-add button:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        /* ============================================
+           QUOTE BANNER
+           ============================================ */
+        .quote-banner {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, var(--accent-red-dim), var(--accent-purple-dim));
+            border: 1px solid rgba(220, 53, 69, 0.15);
+            border-radius: var(--radius-lg);
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            animation: pulseGlow 4s infinite;
+        }
+
+        /* ============================================
+           EMPTY STATE
+           ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* ============================================
+           MODAL / OVERLAY
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .modal h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            float: right;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           PAYCHECK EDITOR
+           ============================================ */
+        .paycheck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .paycheck-card {
+            padding: 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .paycheck-card:hover {
+            border-color: var(--accent-green);
+        }
+
+        .paycheck-period {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .paycheck-amount {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .paycheck-amount input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--accent-green);
+            font-size: 22px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            outline: none;
+        }
+
+        /* ============================================
+           MOBILE RESPONSIVE
+           ============================================ */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            z-index: 1001;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .mobile-header .logo-text {
+            font-weight: 800;
+            font-size: 16px;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            z-index: 1001;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 8px;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px 4px;
+            transition: var(--transition);
+        }
+
+        .mobile-nav-item .nav-icon {
+            font-size: 20px;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--accent-red);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .mobile-nav {
+                display: flex;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 72px 16px 80px;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .habits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .rel-tabs {
+                flex-wrap: wrap;
+            }
+
+            .rel-tab {
+                flex: unset;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .ai-bubble {
+                max-width: 85%;
+            }
+
+            .daily-score-ring {
+                width: 120px;
+                height: 120px;
+            }
+
+            .money-total {
+                font-size: 36px;
+            }
+        }
+
+        /* ============================================
+           MISC
+           ============================================ */
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag-red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+        }
+
+        .tag-green {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .tag-purple {
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+        }
+
+        .tag-amber {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-amber);
+        }
+
+        textarea.focus-input {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .flex-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mb-16 { margin-bottom: 16px; }
+        .mb-24 { margin-bottom: 24px; }
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .gap-16 { gap: 16px; }
+    </style>
+</head>
+<body>
+
+    <!-- SVG DEFS for gradients -->
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#dc3545"/>
+                <stop offset="100%" style="stop-color:#8b5cf6"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- ==========================================
+         MOBILE HEADER
+         ========================================== -->
+    <div class="mobile-header">
+        <span class="logo-text">KAYDEN OS</span>
+        <button class="mobile-menu-btn" onclick="toggleMobileMore()">⚡</button>
+    </div>
+
+    <!-- ==========================================
+         SIDEBAR NAVIGATION
+         ========================================== -->
+    <nav class="sidebar">
+        <div class="sidebar-logo" onclick="navigate('home')">K</div>
+        <div class="sidebar-nav">
+            <div class="nav-item active" data-page="home" onclick="navigate('home')">
+                🏠
+                <span class="tooltip">Today</span>
+            </div>
+            <div class="nav-item" data-page="ai" onclick="navigate('ai')">
+                🤖
+                <span class="tooltip">AI Hub</span>
+            </div>
+            <div class="nav-item" data-page="jobcorps" onclick="navigate('jobcorps')">
+                🎓
+                <span class="tooltip">Job Corps</span>
+            </div>
+            <div class="nav-item" data-page="career" onclick="navigate('career')">
+                💻
+                <span class="tooltip">Career Paths</span>
+            </div>
+            <div class="nav-item" data-page="habits" onclick="navigate('habits')">
+                🧩
+                <span class="tooltip">Habits</span>
+            </div>
+            <div class="nav-item" data-page="money" onclick="navigate('money')">
+                💰
+                <span class="tooltip">Money</span>
+            </div>
+            <div class="nav-item" data-page="relationship" onclick="navigate('relationship')">
+                🖤
+                <span class="tooltip">Relationship</span>
+            </div>
+            <div class="nav-item" data-page="assistant" onclick="navigate('assistant')">
+                🎯
+                <span class="tooltip">Assistant</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         MOBILE BOTTOM NAV
+         ========================================== -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-item active" data-page="home" onclick="navigate('home')">
+            <span class="nav-icon">🏠</span>
+            Today
+        </div>
+        <div class="mobile-nav-item" data-page="ai" onclick="navigate('ai')">
+            <span class="nav-icon">🤖</span>
+            AI
+        </div>
+        <div class="mobile-nav-item" data-page="habits" onclick="navigate('habits')">
+            <span class="nav-icon">🧩</span>
+            Habits
+        </div>
+        <div class="mobile-nav-item" data-page="money" onclick="navigate('money')">
+            <span class="nav-icon">💰</span>
+            Money
+        </div>
+        <div class="mobile-nav-item" data-page="career" onclick="navigate('career')">
+            <span class="nav-icon">💻</span>
+            Career
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="main-content">
+
+        <!-- ======== HOME / TODAY SCREEN ======== -->
+        <div class="page active" id="page-home">
+            <div class="page-header">
+                <div class="greeting-time" id="greetingTime"></div>
+                <h1 id="greetingText">Good morning, Kayden.</h1>
+                <p>Here's your command center for today.</p>
+            </div>
+
+            <div class="quote-banner" id="dailyQuote">
+                "Discipline is choosing between what you want now and what you want most."
+            </div>
+
+            <div class="grid-4 mb-24">
+                <div class="card stat-card stat-red card-glow-red" style="animation-delay: 0.05s">
+                    <div class="stat-value" id="statScore">0</div>
+                    <div class="stat-label">Today's Score</div>
+                </div>
+                <div class="card stat-card stat-green" style="animation-delay: 0.1s">
+                    <div class="stat-value" id="statHabits">0/10</div>
+                    <div class="stat-label">Habits Done</div>
+                </div>
+                <div class="card stat-card stat-purple" style="animation-delay: 0.15s">
+                    <div class="stat-value" id="statTasks">0</div>
+                    <div class="stat-label">Tasks Done</div>
+                </div>
+                <div class="card stat-card stat-amber" style="animation-delay: 0.2s">
+                    <div class="stat-value" id="statStreak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+            </div>
+
+            <div class="grid-2 mb-24">
+                <!-- Daily Score Ring -->
+                <div class="card card-glow-red" style="animation-delay: 0.25s">
+                    <div class="card-title"><span class="icon">⚡</span> Daily Progress</div>
+                    <div class="daily-score-ring">
+                        <svg viewBox="0 0 128 128">
+                            <circle class="ring-bg" cx="64" cy="64" r="60"/>
+                            <circle class="ring-fill" id="scoreRing" cx="64" cy="64" r="60"/>
+                        </svg>
+                        <div class="daily-score-value">
+                            <div class="number" id="ringScore">0</div>
+                            <div class="label">Points</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="dailyProgressBar" style="width: 0%"></div>
+                    </div>
+                    <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">
+                        Goal: <span id="dailyGoalText">100 points</span>
+                    </p>
+                </div>
+
+                <!-- What Matters Today -->
+                <div class="card card-glow-purple" style="animation-delay: 0.3s">
+                    <div class="card-title"><span class="icon">🎯</span> What Matters Today</div>
+                    <div class="focus-input-container">
+                        <input type="text" class="focus-input" id="focusInput"
+                               placeholder="What's your main focus today?"
+                               onkeypress="if(event.key==='Enter')setFocus()">
+                    </div>
+                    <div id="focusDisplay" style="display:none; padding:16px; background:var(--accent-purple-dim); border-radius:var(--radius-md); border-left:3px solid var(--accent-purple);">
+                        <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">TODAY'S FOCUS</div>
+                        <div id="focusText" style="font-size:16px; font-weight:600;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks -->
+            <div class="card mb-24" style="animation-delay: 0.35s">
+                <div class="card-title"><span class="icon">📋</span> Tasks</div>
+                <div class="task-list" id="taskList"></div>
+                <div class="inline-add">
+                    <input type="text" id="newTaskInput" placeholder="Add a new task..."
+                           onkeypress="if(event.key==='Enter')addTask()">
+                    <button onclick="addTask()">+</button>
+                </div>
+            </div>
+
+            <!-- Quick Habits on Home -->
+            <div class="card" style="animation-delay: 0.4s">
+                <div class="card-title"><span class="icon">🧩</span> Quick Habits</div>
+                <div class="habits-grid" id="homeHabitsGrid"></div>
+            </div>
+        </div>
+
+        <!-- ======== AI CONTROL HUB ======== -->
+        <div class="page" id="page-ai">
+            <div class="page-header">
+                <h1>🤖 AI Control Hub</h1>
+                <p>One AI. Every capability. Talk naturally.</p>
+            </div>
+
+            <div class="card ai-chat-container">
+                <div class="ai-messages" id="aiMessages">
+                    <div class="ai-message assistant">
+                        <div class="ai-avatar">🤖</div>
+                        <div class="ai-bubble">
+                            Hey Kayden. I'm your all-in-one AI. I can help with writing, coding, planning, brainstorming, career research, resume building — anything you need. Just talk to me naturally. What are we working on?
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-input-bar">
+                    <input type="text" id="aiInput" placeholder="Ask me anything..."
+                           onkeypress="if(event.key==='Enter')sendAI()">
+                    <button class="ai-send-btn" onclick="sendAI()">Run ⚡</button>
+                </div>
+            </div>
+
+            <!-- Saved AI Outputs -->
+            <div class="card mt-24">
+                <div class="card-title"><span class="icon">⭐</span> Saved Outputs</div>
+                <div id="savedOutputs">
+                    <div class="empty-state">
+                        <div class="empty-icon">⭐</div>
+                        <p>Star any AI response to save it here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== JOB CORPS SYSTEM ======== -->
+        <div class="page" id="page-jobcorps">
+            <div class="page-header">
+                <h1>🎓 Job Corps System</h1>
+                <p>Track your Office Administration progress, ETAR, and WBL.</p>
+            </div>
+
+            <div class="grid-3 mb-24">
+                <div class="card stat-card stat-green card-glow-purple">
+                    <div class="stat-value" id="etarProgress">65%</div>
+                    <div class="stat-label">ETAR Progress</div>
+                </div>
+                <div class="card stat-card stat-amber">
+                    <div class="stat-value" id="wblHours">120</div>
+                    <div class="stat-label">WBL Hours</div>
+                </div>
+                <div class="card stat-card stat-purple">
+                    <div class="stat-value" id="daysActive">45</div>
+                    <div class="stat-label">Days Active</div>
+                </div>
+            </div>
+
+            <!-- ETAR Progress Bar -->
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">📊</span> ETAR Progress</div>
+                <div class="progress-tracker">
+                    <div class="progress-item">
+                        <span class="progress-item-label">Office Skills</span>
+                        <div class="progress-item-bar">
+                            <div class="progress-item-fill" style="width:75%; background: var(--accent-green);"></div>
+                        </div>
+                        <span class="progress-item-value" style="color:var(--accent-green);">75%</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-item-label">Computer Basics</span>
+                        <div class="progress-item-bar">
+                            <div class="progress-item-fill" style="width:85%; background: var(--accent-blue);"></div>
+                        </div>
+                        <span class="progress-item-value" style="color:var(--accent-blue);">85%</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-item-label">Documentation</span>
+                        <div class="progress-item-bar">
+                            <div class="progress-item-fill" style="width:60%; background: var(--accent-purple);"></div>
+                        </div>
+                        <span class="progress-item-value" style="color:var(--accent-purple);">60%</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-item-label">Communication</span>
+                        <div class="progress-item-bar">
+                            <div class="progress-item-fill" style="width:70%; background: var(--accent-amber);"></div>
+                        </div>
+                        <span class="progress-item-value" style="color:var(--accent-amber);">70%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Class Responsibilities -->
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">📝</span> Daily Class Responsibilities</div>
+                <div class="task-list" id="jcTaskList"></div>
+                <div class="inline-add">
+                    <input type="text" id="newJcTask" placeholder="Add class responsibility..."
+                           onkeypress="if(event.key==='Enter')addJcTask()">
+                    <button onclick="addJcTask()">+</button>
+                </div>
+            </div>
+
+            <!-- WBL Log -->
+            <div class="card">
+                <div class="card-title"><span class="icon">🏢</span> Work-Based Learning Log</div>
+                <div id="wblLog">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <p>Log your WBL hours and activities.</p>
+                    </div>
+                </div>
+                <div class="inline-add">
+                    <input type="text" id="wblActivity" placeholder="Activity (e.g., Filing, Data entry)"
+                           style="flex:2;">
+                    <input type="number" id="wblHoursInput" placeholder="Hours" style="flex:1; max-width:80px;">
+                    <button onclick="addWblEntry()">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== CAREER PATHS ======== -->
+        <div class="page" id="page-career">
+            <div class="page-header">
+                <h1>💻 Career Paths</h1>
+                <p>Explore, learn, and build toward your future. Switch or combine anytime.</p>
+            </div>
+
+            <!-- Career Overview -->
+            <div id="careerOverview">
+                <div class="grid-3 mb-24">
+                    <div class="card career-card card-glow-red" onclick="openCareer('mechanic')" style="animation-delay:0.05s">
+                        <div class="career-icon">🔧</div>
+                        <div class="career-title">Mechanic</div>
+                        <div class="career-desc">Hands-on work. Repair, diagnose, and understand mechanical systems.</div>
+                        <div class="career-skills">
+                            <span class="skill-tag">Engine Basics</span>
+                            <span class="skill-tag">Brakes</span>
+                            <span class="skill-tag">Diagnostics</span>
+                            <span class="skill-tag">Electrical</span>
+                        </div>
+                        <div class="progress-bar-container mt-16">
+                            <div class="progress-bar-fill" id="mechProgress" style="width:10%"></div>
+                        </div>
+                    </div>
+                    <div class="card career-card card-glow-purple" onclick="openCareer('it')" style="animation-delay:0.1s">
+                        <div class="career-icon">💻</div>
+                        <div class="career-title">IT Technician</div>
+                        <div class="career-desc">Build, fix, and manage computers and networks. High demand everywhere.</div>
+                        <div class="career-skills">
+                            <span class="skill-tag">Hardware</span>
+                            <span class="skill-tag">Networking</span>
+                            <span class="skill-tag">OS</span>
+                            <span class="skill-tag">Troubleshooting</span>
+                        </div>
+                        <div class="progress-bar-container mt-16">
+                            <div class="progress-bar-fill" id="itProgress" style="width:15%"></div>
+                        </div>
+                    </div>
+                    <div class="card career-card" onclick="openCareer('cyber')" style="animation-delay:0.15s">
+                        <div class="career-icon">🔐</div>
+                        <div class="career-title">Cybersecurity</div>
+                        <div class="career-desc">Protect systems. Ethical hacking, defense, and security analysis.</div>
+                        <div class="career-skills">
+                            <span class="skill-tag">Networks</span>
+                            <span class="skill-tag">Linux</span>
+                            <span class="skill-tag">Pen Testing</span>
+                            <span class="skill-tag">Protocols</span>
+                        </div>
+                        <div class="progress-bar-container mt-16">
+                            <div class="progress-bar-fill" id="cyberProgress" style="width:5%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Path Comparison -->
+                <div class="card">
+                    <div class="card-title"><span class="icon">⚖️</span> Path Comparison</div>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <th style="padding:12px; text-align:left; color:var(--text-muted);"></th>
+                                    <th style="padding:12px; text-align:center;">🔧 Mechanic</th>
+                                    <th style="padding:12px; text-align:center;">💻 IT Tech</th>
+                                    <th style="padding:12px; text-align:center;">🔐 Cyber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <td style="padding:12px; color:var(--text-secondary);">Work Style</td>
+                                    <td style="padding:12px; text-align:center;">Hands-on</td>
+                                    <td style="padding:12px; text-align:center;">Mixed</td>
+                                    <td style="padding:12px; text-align:center;">Remote-friendly</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <td style="padding:12px; color:var(--text-secondary);">Entry Salary</td>
+                                    <td style="padding:12px; text-align:center;">$35-45k</td>
+                                    <td style="padding:12px; text-align:center;">$40-55k</td>
+                                    <td style="padding:12px; text-align:center;">$55-75k</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <td style="padding:12px; color:var(--text-secondary);">Certs Needed</td>
+                                    <td style="padding:12px; text-align:center;">ASE</td>
+                                    <td style="padding:12px; text-align:center;">CompTIA A+</td>
+                                    <td style="padding:12px; text-align:center;">Security+</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <td style="padding:12px; color:var(--text-secondary);">Learning Time</td>
+                                    <td style="padding:12px; text-align:center;">6-12 mo</td>
+                                    <td style="padding:12px; text-align:center;">3-6 mo</td>
+                                    <td style="padding:12px; text-align:center;">6-12 mo</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:12px; color:var(--text-secondary);">Best For You If...</td>
+                                    <td style="padding:12px; text-align:center; font-size:12px;">You like fixing physical things</td>
+                                    <td style="padding:12px; text-align:center; font-size:12px;">You want quick employment</td>
+                                    <td style="padding:12px; text-align:center; font-size:12px;">You want high earning + remote</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Detail Views -->
+            <div class="career-detail" id="career-mechanic">
+                <button class="back-btn" onclick="closeCareer()">← Back to Paths</button>
+                <h2>🔧 Mechanic Path</h2>
+                <div class="progress-bar-container mb-24">
+                    <div class="progress-bar-fill" style="width:10%"></div>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('mech1')">
+                    <div class="lesson-number">LESSON 01</div>
+                    <div class="lesson-title">How Engines Work</div>
+                    <div class="lesson-preview">Understand the basic 4-stroke engine cycle that powers most cars.</div>
+                    <div class="lesson-status in-progress">● Start</div>
+                </div>
+                <div class="lesson-content" id="lesson-mech1">
+                    <h3>🔧 How Engines Work — The 4-Stroke Cycle</h3>
+                    <p>Every gasoline car engine follows four steps to turn fuel into motion:</p>
+                    <div class="key-point">
+                        <strong>1. Intake:</strong> The piston goes down, sucking in air and fuel mixture.
+                    </div>
+                    <div class="key-point">
+                        <strong>2. Compression:</strong> The piston goes up, squeezing (compressing) the mixture.
+                    </div>
+                    <div class="key-point">
+                        <strong>3. Power:</strong> The spark plug ignites the mixture — BOOM — pushing the piston down hard. This is what creates motion.
+                    </div>
+                    <div class="key-point">
+                        <strong>4. Exhaust:</strong> The piston goes back up, pushing out the burned gas through the exhaust.
+                    </div>
+                    <p>This happens thousands of times per minute in every cylinder. Most cars have 4 or 6 cylinders working together.</p>
+                    <p><strong>Why it matters:</strong> Understanding this cycle helps you diagnose issues like misfires, rough idle, or lack of power.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('mech1')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('mech2')">
+                    <div class="lesson-number">LESSON 02</div>
+                    <div class="lesson-title">Basic Car Systems</div>
+                    <div class="lesson-preview">Brakes, cooling, electrical, fuel — the main systems in every vehicle.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-mech2">
+                    <h3>🔧 The 5 Main Car Systems</h3>
+                    <div class="key-point"><strong>1. Engine System:</strong> Converts fuel to motion (what you just learned).</div>
+                    <div class="key-point"><strong>2. Cooling System:</strong> Keeps the engine from overheating. Uses coolant, radiator, water pump, and thermostat.</div>
+                    <div class="key-point"><strong>3. Braking System:</strong> Pads press against rotors to slow the wheels. Brake fluid transfers pressure from your foot to the brakes.</div>
+                    <div class="key-point"><strong>4. Electrical System:</strong> Battery starts the car. Alternator charges the battery while driving. Powers lights, radio, etc.</div>
+                    <div class="key-point"><strong>5. Fuel System:</strong> Tank → Fuel pump → Fuel filter → Injectors → Engine. Delivers the right amount of fuel.</div>
+                    <p>Every car problem falls into one of these systems. Learn them and you can diagnose almost anything.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('mech2')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card" onclick="toggleLesson('mech3')">
+                    <div class="lesson-number">LESSON 03</div>
+                    <div class="lesson-title">Tools Every Mechanic Needs</div>
+                    <div class="lesson-preview">The essential tools for starting any repair work.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-mech3">
+                    <h3>🔧 Essential Mechanic Tools</h3>
+                    <div class="key-point"><strong>Socket Set:</strong> The #1 most used tool. Gets bolts on and off. Get metric AND standard.</div>
+                    <div class="key-point"><strong>Wrench Set:</strong> For when you can't fit a socket. Open-end and box-end.</div>
+                    <div class="key-point"><strong>Screwdrivers:</strong> Phillips and flat-head in multiple sizes.</div>
+                    <div class="key-point"><strong>Pliers:</strong> Needle-nose, regular, and channel-lock.</div>
+                    <div class="key-point"><strong>Jack & Jack Stands:</strong> NEVER go under a car held up only by a jack. Stands save lives.</div>
+                    <div class="key-point"><strong>OBD2 Scanner:</strong> Plugs into your car and reads error codes. Under $30 and incredibly useful.</div>
+                    <p>Start small. You don't need everything — build your collection over time.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('mech3')">✓ Mark Complete</button>
+                </div>
+            </div>
+
+            <div class="career-detail" id="career-it">
+                <button class="back-btn" onclick="closeCareer()">← Back to Paths</button>
+                <h2>💻 IT Technician Path</h2>
+                <div class="progress-bar-container mb-24">
+                    <div class="progress-bar-fill" style="width:15%"></div>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('it1')">
+                    <div class="lesson-number">LESSON 01</div>
+                    <div class="lesson-title">What is RAM?</div>
+                    <div class="lesson-preview">Understand short-term memory in a computer and why it matters.</div>
+                    <div class="lesson-status in-progress">● Start</div>
+                </div>
+                <div class="lesson-content" id="lesson-it1">
+                    <h3>💻 What is RAM?</h3>
+                    <p>RAM stands for <strong>Random Access Memory</strong>. Think of it as your computer's short-term memory.</p>
+                    <div class="key-point">
+                        <strong>Analogy:</strong> Your desk is RAM. The bigger your desk, the more papers (programs) you can work on at once. Your filing cabinet is your hard drive — it stores everything long-term.
+                    </div>
+                    <p>When you open Chrome, Spotify, and a game — all of those sit in RAM. When RAM fills up, your computer slows down.</p>
+                    <div class="key-point">
+                        <strong>Key facts:</strong><br>
+                        • RAM is <em>volatile</em> — it loses data when powered off<br>
+                        • Most PCs have 8GB-16GB of RAM<br>
+                        • RAM comes in sticks that plug into the motherboard<br>
+                        • More RAM = more multitasking power
+                    </div>
+                    <button class="mark-complete-btn" onclick="completeLesson('it1')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('it2')">
+                    <div class="lesson-number">LESSON 02</div>
+                    <div class="lesson-title">How Does a Computer Boot?</div>
+                    <div class="lesson-preview">What happens from the moment you press the power button.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-it2">
+                    <h3>💻 The Boot Process</h3>
+                    <p>When you press the power button, here's what happens in order:</p>
+                    <div class="key-point"><strong>1. Power Supply activates:</strong> Sends electricity to the motherboard.</div>
+                    <div class="key-point"><strong>2. BIOS/UEFI runs:</strong> The first software that runs. It's built into the motherboard. It checks that your hardware is working (called POST — Power On Self Test).</div>
+                    <div class="key-point"><strong>3. Boot device found:</strong> BIOS looks for a drive with an operating system (usually your SSD or HDD).</div>
+                    <div class="key-point"><strong>4. OS loads:</strong> Windows, Linux, or macOS starts loading from the drive into RAM.</div>
+                    <div class="key-point"><strong>5. Login screen:</strong> OS is ready. You're in.</div>
+                    <p><strong>If boot fails:</strong> The issue is usually in steps 1-3 — bad power supply, failed RAM, or missing boot drive.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('it2')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('it3')">
+                    <div class="lesson-number">LESSON 03</div>
+                    <div class="lesson-title">What is an IP Address?</div>
+                    <div class="lesson-preview">How computers find each other on a network.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-it3">
+                    <h3>💻 IP Addresses Explained</h3>
+                    <p>Every device on a network gets a unique address — just like every house has a mailing address.</p>
+                    <div class="key-point">
+                        <strong>IP Address = Internet Protocol Address</strong><br>
+                        Example: 192.168.1.15
+                    </div>
+                    <div class="key-point"><strong>Private IP:</strong> Used inside your home network. Your router assigns these. Starts with 192.168.x.x or 10.x.x.x</div>
+                    <div class="key-point"><strong>Public IP:</strong> Your address on the internet. Given by your ISP. This is what websites see.</div>
+                    <div class="key-point"><strong>How to find yours:</strong><br>• Windows: Open cmd → type <code style="background:var(--bg-card);padding:2px 6px;border-radius:4px;">ipconfig</code><br>• Public: Google "what is my IP"</div>
+                    <p>Understanding IPs is foundational for networking, troubleshooting, and cybersecurity.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('it3')">✓ Mark Complete</button>
+                </div>
+            </div>
+
+            <div class="career-detail" id="career-cyber">
+                <button class="back-btn" onclick="closeCareer()">← Back to Paths</button>
+                <h2>🔐 Cybersecurity Path</h2>
+                <div class="progress-bar-container mb-24">
+                    <div class="progress-bar-fill" style="width:5%"></div>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('cyber1')">
+                    <div class="lesson-number">LESSON 01</div>
+                    <div class="lesson-title">What is Cybersecurity?</div>
+                    <div class="lesson-preview">The big picture — what it is, why it matters, and where you fit in.</div>
+                    <div class="lesson-status in-progress">● Start</div>
+                </div>
+                <div class="lesson-content" id="lesson-cyber1">
+                    <h3>🔐 What is Cybersecurity?</h3>
+                    <p>Cybersecurity is the practice of <strong>protecting computers, networks, and data</strong> from unauthorized access, attacks, or damage.</p>
+                    <div class="key-point">
+                        <strong>Think of it this way:</strong> Every company, government, and person has digital information. Cybersecurity professionals are the ones who keep it safe.
+                    </div>
+                    <p>There are different roles in cybersecurity:</p>
+                    <div class="key-point"><strong>🔴 Red Team (Offensive):</strong> Ethical hackers who try to break into systems to find weaknesses.</div>
+                    <div class="key-point"><strong>🔵 Blue Team (Defensive):</strong> People who monitor, detect, and respond to attacks.</div>
+                    <div class="key-point"><strong>🟣 Purple Team:</strong> Combination of both — tests AND defends.</div>
+                    <p><strong>Why it's hot right now:</strong> There are millions of unfilled cybersecurity jobs. Companies are desperate for skilled people. You don't need a degree — certifications and skills matter most.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('cyber1')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card mb-16" onclick="toggleLesson('cyber2')">
+                    <div class="lesson-number">LESSON 02</div>
+                    <div class="lesson-title">Types of Cyber Attacks</div>
+                    <div class="lesson-preview">Phishing, malware, ransomware — know the threats.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-cyber2">
+                    <h3>🔐 Common Cyber Attacks</h3>
+                    <div class="key-point"><strong>Phishing:</strong> Fake emails or messages that trick you into giving up passwords or clicking malicious links. #1 most common attack.</div>
+                    <div class="key-point"><strong>Malware:</strong> Malicious software — viruses, trojans, worms. Gets on your system through downloads or links.</div>
+                    <div class="key-point"><strong>Ransomware:</strong> Locks your files and demands payment to unlock them. Devastating for businesses.</div>
+                    <div class="key-point"><strong>Social Engineering:</strong> Manipulating people (not computers) to get access. "Hey, I'm from IT, what's your password?"</div>
+                    <div class="key-point"><strong>Brute Force:</strong> Trying millions of password combinations until one works.</div>
+                    <p>Knowing these attacks is the first step to defending against them — or ethically testing for them.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('cyber2')">✓ Mark Complete</button>
+                </div>
+
+                <div class="card lesson-card" onclick="toggleLesson('cyber3')">
+                    <div class="lesson-number">LESSON 03</div>
+                    <div class="lesson-title">Networking Basics for Security</div>
+                    <div class="lesson-preview">You can't secure a network if you don't understand how it works.</div>
+                    <div class="lesson-status locked">● Locked</div>
+                </div>
+                <div class="lesson-content" id="lesson-cyber3">
+                    <h3>🔐 Networking Foundations</h3>
+                    <p>Before you can hack or defend anything, you need to understand how data moves.</p>
+                    <div class="key-point"><strong>Packets:</strong> All data on the internet is broken into small pieces called packets. They travel from your device to the server and back.</div>
+                    <div class="key-point"><strong>Ports:</strong> Like doors on a server. Port 80 = HTTP (web). Port 443 = HTTPS (secure web). Port 22 = SSH. Hackers scan for open ports.</div>
+                    <div class="key-point"><strong>Firewalls:</strong> Software or hardware that blocks unauthorized traffic. Like a bouncer at a club door.</div>
+                    <div class="key-point"><strong>DNS:</strong> Translates domain names (google.com) into IP addresses (142.250.80.14). The "phone book" of the internet.</div>
+                    <p>This is foundational. Every cybersecurity tool and technique builds on understanding networks.</p>
+                    <button class="mark-complete-btn" onclick="completeLesson('cyber3')">✓ Mark Complete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== HABITS + ACTIONS ======== -->
+        <div class="page" id="page-habits">
+            <div class="page-header">
+                <h1>🧩 Habits + Actions</h1>
+                <p>Tap and hold to complete. No typing required. Build consistency.</p>
+            </div>
+
+            <div class="grid-2 mb-24">
+                <div class="card stat-card stat-green">
+                    <div class="stat-value" id="habitsCompleted">0</div>
+                    <div class="stat-label">Completed Today</div>
+                </div>
+                <div class="card stat-card stat-amber">
+                    <div class="stat-value" id="habitsPoints">0</div>
+                    <div class="stat-label">Points Earned</div>
+                </div>
+            </div>
+
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">⚡</span> Daily Habits (+10 each)</div>
+                <div class="habits-grid" id="habitsGrid"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><span class="icon">🎯</span> Quick Actions (+5 each)</div>
+                <div class="habits-grid" id="actionsGrid"></div>
+            </div>
+        </div>
+
+        <!-- ======== MONEY + LIFE TRACKER ======== -->
+        <div class="page" id="page-money">
+            <div class="page-header">
+                <h1>💰 Money + Life Tracker</h1>
+                <p>Track income, spending, and activities. Type naturally or log manually.</p>
+            </div>
+
+            <div class="card mb-24">
+                <div class="money-total" id="totalBalance">$0.00</div>
+                <div class="money-label">Total Balance</div>
+
+                <div class="grid-3">
+                    <div class="stat-card">
+                        <div class="stat-value" style="color:var(--accent-green); font-size:22px;" id="totalIncome">$0</div>
+                        <div class="stat-label">Total Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color:var(--accent-red); font-size:22px;" id="totalExpenses">$0</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color:var(--accent-amber); font-size:22px;" id="totalSaved">$0</div>
+                        <div class="stat-label">Saved</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Money Input -->
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">🤖</span> Smart Input</div>
+                <div class="focus-input-container">
+                    <input type="text" class="focus-input" id="moneyAiInput"
+                           placeholder='Type naturally: "Got paid $200" or "Spent $15 on food"'
+                           onkeypress="if(event.key==='Enter')parseMoneyInput()">
+                </div>
+            </div>
+
+            <!-- Manual Add -->
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">➕</span> Manual Entry</div>
+                <div class="grid-3">
+                    <input type="text" class="focus-input" id="manualDesc" placeholder="Description"
+                           style="font-size:13px; padding:12px 16px;">
+                    <input type="number" class="focus-input" id="manualAmount" placeholder="Amount"
+                           style="font-size:13px; padding:12px 16px;">
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-secondary" style="flex:1; color:var(--accent-green);" onclick="addTransaction('income')">+ Income</button>
+                        <button class="btn-secondary" style="flex:1; color:var(--accent-red);" onclick="addTransaction('expense')">- Expense</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paychecks -->
+            <div class="card mb-24">
+                <div class="card-title"><span class="icon">💵</span> Job Corps Paychecks</div>
+                <div class="paycheck-grid" id="paycheckGrid"></div>
+                <div class="inline-add mt-16">
+                    <input type="text" id="paycheckPeriod" placeholder="Pay period (e.g., Jan Week 1)">
+                    <input type="number" id="paycheckAmt" placeholder="Amount" style="max-width:120px;">
+                    <button onclick="addPaycheck()">+</button>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="card">
+                <div class="card-title"><span class="icon">📜</span> Transaction History</div>
+                <div class="transaction-list" id="transactionList">
+                    <div class="empty-state">
+                        <div class="empty-icon">💰</div>
+                        <p>No transactions yet. Start tracking!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== RELATIONSHIP SYSTEM ======== -->
+        <div class="page" id="page-relationship">
+            <div class="page-header">
+                <h1>🖤 Relationship System</h1>
+                <p>Private space. Intentional connection.</p>
+            </div>
+
+            <!-- Lock Screen -->
+            <div class="rel-lock-screen" id="relLockScreen">
+                <div class="rel-lock-icon">🔒</div>
+                <div class="rel-lock-title">Private Space</div>
+                <div class="rel-lock-sub">Enter your PIN to access</div>
+                <div class="rel-pin-input" id="pinInputs">
+                    <input type="password" maxlength="1" oninput="pinNext(this, 0)" autofocus>
+                    <input type="password" maxlength="1" oninput="pinNext(this, 1)">
+                    <input type="password" maxlength="1" oninput="pinNext(this, 2)">
+                    <input type="password" maxlength="1" oninput="pinNext(this, 3)">
+                </div>
+                <button class="rel-unlock-btn" onclick="unlockRelationship()">Unlock</button>
+                <p style="margin-top:12px; font-size:11px; color:var(--text-muted);">Default PIN: 1234</p>
+            </div>
+
+            <!-- Unlocked Content -->
+            <div class="rel-content" id="relContent">
+                <div class="rel-tabs">
+                    <div class="rel-tab active" onclick="switchRelTab('checkin')">Check-In</div>
+                    <div class="rel-tab" onclick="switchRelTab('reminders')">Reminders</div>
+                    <div class="rel-tab" onclick="switchRelTab('paige')">Paige</div>
+                    <div class="rel-tab" onclick="switchRelTab('memories')">Memories</div>
+                    <div class="rel-tab" onclick="switchRelTab('future')">Future</div>
+                    <div class="rel-tab" onclick="switchRelTab('support')">Support</div>
+                    <div class="rel-tab" onclick="switchRelTab('growth')">Growth</div>
+                </div>
+
+                <!-- Check-In Tab -->
+                <div class="rel-tab-content active" id="relTab-checkin">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">💭</span> How are we doing?</div>
+                        <div class="grid-3 mb-16">
+                            <div class="checkin-option" onclick="selectCheckin(this, '😊')">😊<br><small>Good</small></div>
+                            <div class="checkin-option" onclick="selectCheckin(this, '😐')">😐<br><small>Okay</small></div>
+                            <div class="checkin-option" onclick="selectCheckin(this, '😔')">😔<br><small>Rough</small></div>
+                        </div>
+                        <textarea class="focus-input" id="checkinNote" placeholder="Any thoughts? Reflect instead of react..." style="min-height:80px;"></textarea>
+                        <button class="btn-primary mt-16" onclick="saveCheckin()">Save Check-In</button>
+                    </div>
+                    <div id="checkinHistory"></div>
+                </div>
+
+                <!-- Reminders Tab -->
+                <div class="rel-tab-content" id="relTab-reminders">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">💝</span> Connection Reminders</div>
+                        <div class="task-list">
+                            <div class="task-item" onclick="this.classList.toggle('completed')">
+                                <div class="task-checkbox">✓</div>
+                                <span class="task-text">Tell Paige something you appreciate about her</span>
+                            </div>
+                            <div class="task-item" onclick="this.classList.toggle('completed')">
+                                <div class="task-checkbox">✓</div>
+                                <span class="task-text">Send a good morning message</span>
+                            </div>
+                            <div class="task-item" onclick="this.classList.toggle('completed')">
+                                <div class="task-checkbox">✓</div>
+                                <span class="task-text">Ask how her day is going — and listen</span>
+                            </div>
+                            <div class="task-item" onclick="this.classList.toggle('completed')">
+                                <div class="task-checkbox">✓</div>
+                                <span class="task-text">Be present — put the phone down during conversation</span>
+                            </div>
+                            <div class="task-item" onclick="this.classList.toggle('completed')">
+                                <div class="task-checkbox">✓</div>
+                                <span class="task-text">Do something small and thoughtful</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paige Preferences Tab -->
+                <div class="rel-tab-content" id="relTab-paige">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">🖤</span> Paige — Things to Remember</div>
+                        <div id="paigePrefs">
+                            <div class="empty-state">
+                                <div class="empty-icon">🖤</div>
+                                <p>Add details about what matters to Paige.</p>
+                            </div>
+                        </div>
+                        <div class="inline-add mt-16">
+                            <select id="paigePrefType" style="padding:10px; background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text-primary); font-size:13px;">
+                                <option value="likes">Likes</option>
+                                <option value="dislikes">Dislikes</option>
+                                <option value="comfort">Comforts</option>
+                                <option value="important">Important</option>
+                            </select>
+                            <input type="text" id="paigePrefText" placeholder="Add detail..."
+                                   onkeypress="if(event.key==='Enter')addPaigePref()">
+                            <button onclick="addPaigePref()">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memories Tab -->
+                <div class="rel-tab-content" id="relTab-memories">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">📖</span> Memory Log</div>
+                        <div id="memoryLog"></div>
+                        <textarea class="focus-input mt-16" id="memoryText" placeholder="Add a memory, moment, or lesson..."></textarea>
+                        <button class="btn-primary mt-16" onclick="addMemory()">Save Memory</button>
+                    </div>
+                </div>
+
+                <!-- Future Tab -->
+                <div class="rel-tab-content" id="relTab-future">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">🗓️</span> Future Plans</div>
+                        <div id="futurePlans"></div>
+                        <div class="inline-add mt-16">
+                            <input type="text" id="futurePlanText" placeholder="Add a plan or goal..."
+                                   onkeypress="if(event.key==='Enter')addFuturePlan()">
+                            <button onclick="addFuturePlan()">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Tab -->
+                <div class="rel-tab-content" id="relTab-support">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">🛟</span> Support Guide</div>
+                        <div class="card mb-16" style="background:var(--bg-input); border-left:3px solid var(--accent-purple);">
+                            <h3 style="font-size:15px; margin-bottom:8px;">When She's Stressed</h3>
+                            <ul style="padding-left:20px; font-size:13px; color:var(--text-secondary); line-height:2;">
+                                <li>Listen first. Don't try to fix it immediately.</li>
+                                <li>Ask: "Do you want me to listen or help solve this?"</li>
+                                <li>Be calm. Your energy affects hers.</li>
+                                <li>Small gestures > big words.</li>
+                            </ul>
+                        </div>
+                        <div class="card mb-16" style="background:var(--bg-input); border-left:3px solid var(--accent-red);">
+                            <h3 style="font-size:15px; margin-bottom:8px;">How to Respond, Not React</h3>
+                            <ul style="padding-left:20px; font-size:13px; color:var(--text-secondary); line-height:2;">
+                                <li>Pause before speaking. 5-second rule.</li>
+                                <li>Ask yourself: "Will this help or hurt?"</li>
+                                <li>If heated, say: "I need a minute, I'm not leaving."</li>
+                                <li>Come back calmer. Always come back.</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="background:var(--bg-input); border-left:3px solid var(--accent-green);">
+                            <h3 style="font-size:15px; margin-bottom:8px;">Staying Consistent</h3>
+                            <ul style="padding-left:20px; font-size:13px; color:var(--text-secondary); line-height:2;">
+                                <li>Show up even on easy days.</li>
+                                <li>Consistency builds trust more than grand gestures.</li>
+                                <li>Track your effort — not to prove it, but to stay aware.</li>
+                                <li>Be reliable in small things.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Tab -->
+                <div class="rel-tab-content" id="relTab-growth">
+                    <div class="card mb-24">
+                        <div class="card-title"><span class="icon">📈</span> Shared Growth Tracking</div>
+                        <div class="grid-2 mb-16">
+                            <div class="card" style="background:var(--bg-input);">
+                                <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">YOUR GROWTH</div>
+                                <div class="task-list" id="yourGrowthList"></div>
+                                <div class="inline-add">
+                                    <input type="text" id="yourGrowthInput" placeholder="Add growth area..."
+                                           onkeypress="if(event.key==='Enter')addGrowth('your')">
+                                    <button onclick="addGrowth('your')">+</button>
+                                </div>
+                            </div>
+                            <div class="card" style="background:var(--bg-input);">
+                                <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">TOGETHER</div>
+                                <div class="task-list" id="togetherGrowthList"></div>
+                                <div class="inline-add">
+                                    <input type="text" id="togetherGrowthInput" placeholder="Add shared goal..."
+                                           onkeypress="if(event.key==='Enter')addGrowth('together')">
+                                    <button onclick="addGrowth('together')">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Reassurance Builder -->
+                        <div class="card" style="background:var(--bg-input);">
+                            <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">CONSISTENCY TRACKER</div>
+                            <div class="progress-tracker">
+                                <div class="progress-item">
+                                    <span class="progress-item-label">Communication</span>
+                                    <div class="progress-item-bar">
+                                        <div class="progress-item-fill" id="commProgress" style="width:70%; background:var(--accent-purple);"></div>
+                                    </div>
+                                    <span class="progress-item-value" style="color:var(--accent-purple);">70%</span>
+                                </div>
+                                <div class="progress-item">
+                                    <span class="progress-item-label">Effort</span>
+                                    <div class="progress-item-bar">
+                                        <div class="progress-item-fill" id="effortProgress" style="width:80%; background:var(--accent-green);"></div>
+                                    </div>
+                                    <span class="progress-item-value" style="color:var(--accent-green);">80%</span>
+                                </div>
+                                <div class="progress-item">
+                                    <span class="progress-item-label">Showing Up</span>
+                                    <div class="progress-item-bar">
+                                        <div class="progress-item-fill" id="showingUpProgress" style="width:90%; background:var(--accent-amber);"></div>
+                                    </div>
+                                    <span class="progress-item-value" style="color:var(--accent-amber);">90%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== AI ASSISTANT ======== -->
+        <div class="page" id="page-assistant">
+            <div class="page-header">
+                <h1>🎯 Life Assistant</h1>
+                <p>Tell me what's on your mind. I'll point you to the right action.</p>
+            </div>
+
+            <div class="card">
+                <div class="ai-chat-container" style="max-height:600px;">
+                    <div class="ai-messages" id="assistantMessages">
+                        <div class="ai-message assistant">
+                            <div class="ai-avatar">🎯</div>
+                            <div class="ai-bubble">
+                                What's going on, Kayden? Tell me what you need — study help, motivation, money advice, career direction, or just someone to think with. I got you.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-input-bar">
+                        <input type="text" id="assistantInput"
+                               placeholder='"I need to study" / "I feel distracted" / "I want to make money"'
+                               onkeypress="if(event.key==='Enter')sendAssistant()">
+                        <button class="ai-send-btn" onclick="sendAssistant()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==========================================
+         JAVASCRIPT ENGINE
+         ========================================== -->
+    <script>
+        // ============================================
+        // DATA STORE (localStorage persistence)
+        // ============================================
+        const STORE_KEY = 'kaydenOS';
+
+        function getStore() {
+            try {
+                const data = localStorage.getItem(STORE_KEY);
+                return data ? JSON.parse(data) : getDefaultStore();
+            } catch {
+                return getDefaultStore();
+            }
+        }
+
+        function saveStore(store) {
+            try {
+                localStorage.setItem(STORE_KEY, JSON.stringify(store));
+            } catch(e) {
+                console.warn('Storage full or unavailable');
+            }
+        }
+
+        function getDefaultStore() {
+            return {
+                focus: '',
+                tasks: [],
+                habits: {},
+                actions: {},
+                transactions: [],
+                paychecks: [],
+                jcTasks: [],
+                wblEntries: [],
+                checkins: [],
+                paigePrefs: [],
+                memories: [],
+                futurePlans: [],
+                yourGrowth: [],
+                togetherGrowth: [],
+                completedLessons: [],
+                streak: 0,
+                lastActiveDate: null,
+                relPin: '1234',
+                aiSaved: [],
+                aiMemory: []
+            };
+        }
+
+        let store = getStore();
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function navigate(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById('page-' + page).classList.add('active');
+            document.querySelectorAll(`[data-page="${page}"]`).forEach(n => n.classList.add('active'));
+
+            // Close career detail views when navigating
+            if (page === 'career') {
+                closeCareer();
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // ============================================
+        // GREETING & TIME
+        // ============================================
+        function updateGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = 'Good evening';
+            if (hour < 12) greeting = 'Good morning';
+            else if (hour < 17) greeting = 'Good afternoon';
+
+            document.getElementById('greetingText').textContent = `${greeting}, Kayden.`;
+            document.getElementById('greetingTime').textContent =
+                now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) +
+                ' — ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateGreeting();
+        setInterval(updateGreeting, 60000);
+
+        // ============================================
+        // DAILY QUOTES
+        // ============================================
+        const quotes = [
+            '"Discipline is choosing between what you want now and what you want most."',
+            '"You don\'t have to be extreme. Just consistent."',
+            '"Small daily improvements are the key to staggering long-term results."',
+            '"Control your mind, or it will control you."',
+            '"The man who moves a mountain begins by carrying away small stones."',
+            '"Stay patient and trust your journey."',
+            '"It\'s not about being the best. It\'s about being better than you were yesterday."',
+            '"Prove them wrong in silence. Let success make the noise."',
+            '"Hard choices, easy life. Easy choices, hard life."',
+            '"You are what you repeatedly do."',
+            '"Don\'t count the days. Make the days count."',
+            '"Focus on the step in front of you, not the whole staircase."',
+            '"Be so good they can\'t ignore you."',
+            '"Build in silence. Let results speak."',
+            '"Your future self is watching you right now through memories."'
+        ];
+
+        function setDailyQuote() {
+            const today = new Date().toDateString();
+            const index = today.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % quotes.length;
+            document.getElementById('dailyQuote').textContent = quotes[index];
+        }
+        setDailyQuote();
+
+        // ============================================
+        // STREAK SYSTEM
+        // ============================================
+        function updateStreak() {
+            const today = new Date().toDateString();
+            if (store.lastActiveDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                if (store.lastActiveDate === yesterday.toDateString()) {
+                    store.streak++;
+                } else if (store.lastActiveDate !== null) {
+                    store.streak = 1;
+                } else {
+                    store.streak = 1;
+                }
+                store.lastActiveDate = today;
+                saveStore(store);
+            }
+            document.getElementById('statStreak').textContent = store.streak;
+        }
+        updateStreak();
+
+        // ============================================
+        // FOCUS SYSTEM
+        // ============================================
+        function setFocus() {
+            const input = document.getElementById('focusInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            store.focus = val;
+            saveStore(store);
+            renderFocus();
+            input.value = '';
+        }
+
+        function renderFocus() {
+            const display = document.getElementById('focusDisplay');
+            const input = document.getElementById('focusInput');
+            if (store.focus) {
+                display.style.display = 'block';
+                document.getElementById('focusText').textContent = store.focus;
+                input.parentElement.style.display = 'none';
+            } else {
+                display.style.display = 'none';
+                input.parentElement.style.display = 'block';
+            }
+        }
+        renderFocus();
+
+        // ============================================
+        // TASK SYSTEM
+        // ============================================
+        function addTask() {
+            const input = document.getElementById('newTaskInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            store.tasks.push({ text: val, done: false, id: Date.now() });
+            saveStore(store);
+            renderTasks();
+            input.value = '';
+        }
+
+        function toggleTask(id) {
+            const task = store.tasks.find(t => t.id === id);
+            if (task) {
+                task.done = !task.done;
+                saveStore(store);
+                renderTasks();
+                updateDailyScore();
+            }
+        }
+
+        function deleteTask(id) {
+            store.tasks = store.tasks.filter(t => t.id !== id);
+            saveStore(store);
+            renderTasks();
+            updateDailyScore();
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            if (store.tasks.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p style="font-size:13px;">No tasks yet. Add something to focus on.</p></div>';
+                return;
+            }
+            list.innerHTML = store.tasks.map(t => `
+                <div class="task-item ${t.done ? 'completed' : ''}" onclick="toggleTask(${t.id})">
+                    <div class="task-checkbox">${t.done ? '✓' : ''}</div>
+                    <span class="task-text">${t.text}</span>
+                    <span class="task-points">+5</span>
+                    <span style="color:var(--text-muted); cursor:pointer; font-size:16px;" onclick="event.stopPropagation(); deleteTask(${t.id})">×</span>
+                </div>
+            `).join('');
+
+            document.getElementById('statTasks').textContent = store.tasks.filter(t => t.done).length;
+        }
+        renderTasks();
+
+        // ============================================
+        // HABITS SYSTEM
+        // ============================================
+        const defaultHabits = [
+            { id: 'focus', icon: '🎯', label: 'Stayed Focused', points: 10 },
+            { id: 'study', icon: '📚', label: 'Studied IT/Career', points: 10 },
+            { id: 'workout', icon: '💪', label: 'Worked Out', points: 10 },
+            { id: 'water', icon: '💧', label: 'Drank Water', points: 10 },
+            { id: 'sleep', icon: '😴', label: 'Slept 7+ Hours', points: 10 },
+            { id: 'clean', icon: '🧹', label: 'Kept Space Clean', points: 10 },
+            { id: 'nodistractions', icon: '🚫', label: 'Avoided Distractions', points: 10 },
+            { id: 'read', icon: '📖', label: 'Read Something', points: 10 },
+            { id: 'plan', icon: '📝', label: 'Planned Tomorrow', points: 10 },
+            { id: 'grateful', icon: '🙏', label: 'Practiced Gratitude', points: 10 }
+        ];
+
+        const defaultActions = [
+            { id: 'helped', icon: '🤝', label: 'Helped Someone', points: 5 },
+            { id: 'saved', icon: '💰', label: 'Saved Money', points: 5 },
+            { id: 'early', icon: '⏰', label: 'Woke Up Early', points: 5 },
+            { id: 'kind', icon: '💛', label: 'Was Kind', points: 5 },
+            { id: 'paige', icon: '🖤', label: 'Showed Up for Paige', points: 5 },
+            { id: 'learned', icon: '🧠', label: 'Learned Something New', points: 5 },
+            { id: 'calm', icon: '🧘', label: 'Stayed Calm', points: 5 },
+            { id: 'cooked', icon: '🍳', label: 'Cooked a Meal', points: 5 }
+        ];
+
+        let holdTimer = null;
+
+        function renderHabits() {
+            const today = new Date().toDateString();
+            const habitsGrid = document.getElementById('habitsGrid');
+            const actionsGrid = document.getElementById('actionsGrid');
+            const homeGrid = document.getElementById('homeHabitsGrid');
+
+            // Reset habits if new day
+            if (!store.habits._date || store.habits._date !== today) {
+                store.habits = { _date: today };
+                store.actions = { _date: today };
+                saveStore(store);
+            }
+
+            habitsGrid.innerHTML = defaultHabits.map(h => `
+                <div class="habit-btn ${store.habits[h.id] ? 'done' : ''}"
+                     onmousedown="startHold('habits','${h.id}', this)"
+                     onmouseup="cancelHold()"
+                     onmouseleave="cancelHold()"
+                     ontouchstart="startHold('habits','${h.id}', this)"
+                     ontouchend="cancelHold()">
+                    <div class="hold-progress"></div>
+                    <span class="habit-icon">${h.icon}</span>
+                    ${h.label}
+                </div>
+            `).join('');
+
+            actionsGrid.innerHTML = defaultActions.map(a => `
+                <div class="habit-btn ${store.actions[a.id] ? 'done' : ''}"
+                     onmousedown="startHold('actions','${a.id}', this)"
+                     onmouseup="cancelHold()"
+                     onmouseleave="cancelHold()"
+                     ontouchstart="startHold('actions','${a.id}', this)"
+                     ontouchend="cancelHold()">
+                    <div class="hold-progress"></div>
+                    <span class="habit-icon">${a.icon}</span>
+                    ${a.label}
+                </div>
+            `).join('');
+
+            // Home page quick habits (first 6)
+            homeGrid.innerHTML = defaultHabits.slice(0, 6).map(h => `
+                <div class="habit-btn ${store.habits[h.id] ? 'done' : ''}"
+                     onmousedown="startHold('habits','${h.id}', this)"
+                     onmouseup="cancelHold()"
+                     onmouseleave="cancelHold()"
+                     ontouchstart="startHold('habits','${h.id}', this)"
+                     ontouchend="cancelHold()">
+                    <div class="hold-progress"></div>
+                    <span class="habit-icon">${h.icon}</span>
+                    ${h.label}
+                </div>
+            `).join('');
+
+            updateHabitStats();
+        }
+
+        function startHold(type, id, el) {
+            if (store[type][id]) return; // Already done
+            el.classList.add('holding');
+            holdTimer = setTimeout(() => {
+                store[type][id] = true;
+                saveStore(store);
+                el.classList.remove('holding');
+                renderHabits();
+                updateDailyScore();
+            }, 800);
+        }
+
+        function cancelHold() {
+            clearTimeout(holdTimer);
+            document.querySelectorAll('.habit-btn.holding').forEach(el => el.classList.remove('holding'));
+        }
+
+        function updateHabitStats() {
+            const habitsDone = defaultHabits.filter(h => store.habits[h.id]).length;
+            const actionsDone = defaultActions.filter(a => store.actions[a.id]).length;
+
+            document.getElementById('statHabits').textContent = `${habitsDone}/${defaultHabits.length}`;
+            document.getElementById('habitsCompleted').textContent = habitsDone + actionsDone;
+            document.getElementById('habitsPoints').textContent =
+                (habitsDone * 10) + (actionsDone * 5);
+        }
+
+        renderHabits();
+
+        // ============================================
+        // DAILY SCORE SYSTEM
+        // ============================================
+        function updateDailyScore() {
+            const habitsDone = defaultHabits.filter(h => store.habits[h.id]).length;
+            const actionsDone = defaultActions.filter(a => store.actions[a.id]).length;
+            const tasksDone = store.tasks.filter(t => t.done).length;
+
+            const score = (habitsDone * 10) + (actionsDone * 5) + (tasksDone * 5);
+            const maxScore = (defaultHabits.length * 10) + (defaultActions.length * 5) + (store.tasks.length * 5);
+            const percent = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+
+            document.getElementById('statScore').textContent = score;
+            document.getElementById('ringScore').textContent = score;
+
+            // Update ring
+            const ring = document.getElementById('scoreRing');
+            const circumference = 2 * Math.PI * 60; // r=60
+            const offset = circumference - (circumference * percent / 100);
+            ring.style.strokeDashoffset = offset;
+
+            // Progress bar
+            document.getElementById('dailyProgressBar').style.width = percent + '%';
+            document.getElementById('dailyGoalText').textContent = `${score} / ${maxScore || 100} points`;
+        }
+        updateDailyScore();
+
+        // ============================================
+        // JOB CORPS
+        // ============================================
+        function addJcTask() {
+            const input = document.getElementById('newJcTask');
+            const val = input.value.trim();
+            if (!val) return;
+            store.jcTasks.push({ text: val, done: false, id: Date.now() });
+            saveStore(store);
+            renderJcTasks();
+            input.value = '';
+        }
+
+        function toggleJcTask(id) {
+            const task = store.jcTasks.find(t => t.id === id);
+            if (task) {
+                task.done = !task.done;
+                saveStore(store);
+                renderJcTasks();
+            }
+        }
+
+        function renderJcTasks() {
+            const list = document.getElementById('jcTaskList');
+            if (store.jcTasks.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p style="font-size:13px;">Add your class responsibilities.</p></div>';
+                return;
+            }
+            list.innerHTML = store.jcTasks.map(t => `
+                <div class="task-item ${t.done ? 'completed' : ''}" onclick="toggleJcTask(${t.id})">
+                    <div class="task-checkbox">${t.done ? '✓' : ''}</div>
+                    <span class="task-text">${t.text}</span>
+                </div>
+            `).join('');
+        }
+        renderJcTasks();
+
+        function addWblEntry() {
+            const activity = document.getElementById('wblActivity').value.trim();
+            const hours = parseFloat(document.getElementById('wblHoursInput').value);
+            if (!activity || !hours) return;
+
+            store.wblEntries.push({
+                activity, hours,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            });
+            saveStore(store);
+            renderWbl();
+            document.getElementById('wblActivity').value = '';
+            document.getElementById('wblHoursInput').value = '';
+        }
+
+        function renderWbl() {
+            const log = document.getElementById('wblLog');
+            if (store.wblEntries.length === 0) {
+                log.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Log your WBL hours and activities.</p></div>';
+                return;
+            }
+            const totalHours = store.wblEntries.reduce((sum, e) => sum + e.hours, 0);
+            document.getElementById('wblHours').textContent = totalHours;
+
+            log.innerHTML = store.wblEntries.map(e => `
+                <div class="transaction-item" style="margin-bottom:8px;">
+                    <div class="transaction-info">
+                        <div class="transaction-icon income">🏢</div>
+                        <div>
+                            <div class="transaction-name">${e.activity}</div>
+                            <div class="transaction-date">${e.date}</div>
+                        </div>
+                    </div>
+                    <div class="transaction-amount positive">${e.hours}h</div>
+                </div>
+            `).join('');
+        }
+        renderWbl();
+
+        // ============================================
+        // CAREER PATHS
+        // ============================================
+        function openCareer(path) {
+            document.getElementById('careerOverview').style.display = 'none';
+            document.querySelectorAll('.career-detail').forEach(d => d.classList.remove('active'));
+            document.getElementById('career-' + path).classList.add('active');
+        }
+
+        function closeCareer() {
+            document.getElementById('careerOverview').style.display = 'block';
+            document.querySelectorAll('.career-detail').forEach(d => d.classList.remove('active'));
+        }
+
+        function toggleLesson(id) {
+            const content = document.getElementById('lesson-' + id);
+            content.classList.toggle('open');
+        }
+
+        function completeLesson(id) {
+            if (!store.completedLessons.includes(id)) {
+                store.completedLessons.push(id);
+                saveStore(store);
+            }
+            const content = document.getElementById('lesson-' + id);
+            const card = content.previousElementSibling;
+            const status = card.querySelector('.lesson-status');
+            status.textContent = '● Completed';
+            status.className = 'lesson-status completed';
+
+            // Update progress bars
+            updateCareerProgress();
+        }
+
+        function updateCareerProgress() {
+            const mechLessons = ['mech1', 'mech2', 'mech3'];
+            const itLessons = ['it1', 'it2', 'it3'];
+            const cyberLessons = ['cyber1', 'cyber2', 'cyber3'];
+
+            const mechDone = mechLessons.filter(l => store.completedLessons.includes(l)).length;
+            const itDone = itLessons.filter(l => store.completedLessons.includes(l)).length;
+            const cyberDone = cyberLessons.filter(l => store.completedLessons.includes(l)).length;
+
+            if (document.getElementById('mechProgress'))
+                document.getElementById('mechProgress').style.width = (mechDone / mechLessons.length * 100) + '%';
+            if (document.getElementById('itProgress'))
+                document.getElementById('itProgress').style.width = (itDone / itLessons.length * 100) + '%';
+            if (document.getElementById('cyberProgress'))
+                document.getElementById('cyberProgress').style.width = (cyberDone / cyberLessons.length * 100) + '%';
+        }
+        updateCareerProgress();
+
+        // ============================================
+        // MONEY TRACKER
+        // ============================================
+        function parseMoneyInput() {
+            const input = document.getElementById('moneyAiInput');
+            const val = input.value.trim().toLowerCase();
+            if (!val) return;
+
+            const amountMatch = val.match(/\$?(\d+\.?\d*)/);
+            if (!amountMatch) {
+                alert('Could not detect an amount. Try: "Spent $15 on food" or "Got paid $200"');
+                return;
+            }
+
+            const amount = parseFloat(amountMatch[1]);
+            const isIncome = val.includes('paid') || val.includes('earned') || val.includes('got') ||
+                            val.includes('received') || val.includes('income') || val.includes('paycheck');
+
+            const type = isIncome ? 'income' : 'expense';
+
+            // Extract description
+            let desc = val.replace(/\$?\d+\.?\d*/g, '').trim();
+            desc = desc.replace(/^(i |spent |on |got |paid |earned |received )+/g, '').trim();
+            if (!desc) desc = isIncome ? 'Income' : 'Expense';
+            desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+
+            store.transactions.push({
+                type, amount, desc,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            });
+            saveStore(store);
+            renderTransactions();
+            input.value = '';
+        }
+
+        function addTransaction(type) {
+            const desc = document.getElementById('manualDesc').value.trim();
+            const amount = parseFloat(document.getElementById('manualAmount').value);
+            if (!desc || !amount) return;
+
+            store.transactions.push({
+                type, amount, desc,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            });
+            saveStore(store);
+            renderTransactions();
+            document.getElementById('manualDesc').value = '';
+            document.getElementById('manualAmount').value = '';
+        }
+
+        function renderTransactions() {
+            const list = document.getElementById('transactionList');
+            const totalIncome = store.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const totalExpenses = store.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            const balance = totalIncome - totalExpenses;
+
+            document.getElementById('totalBalance').textContent = '$' + balance.toFixed(2);
+            document.getElementById('totalIncome').textContent = '$' + totalIncome.toFixed(0);
+            document.getElementById('totalExpenses').textContent = '$' + totalExpenses.toFixed(0);
+            document.getElementById('totalSaved').textContent = '$' + Math.max(0, balance).toFixed(0);
+
+            if (store.transactions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div><p>No transactions yet. Start tracking!</p></div>';
+                return;
+            }
+
+            list.innerHTML = [...store.transactions].reverse().map(t => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon ${t.type}">${t.type === 'income' ? '💵' : '🛒'}</div>
+                        <div>
+                            <div class="transaction-name">${t.desc}</div>
+                            <div class="transaction-date">${t.date}</div>
+                        </div>
+                    </div>
+                    <div class="transaction-amount ${t.type === 'income' ? 'positive' : 'negative'}">
+                        ${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}
+                    </div>
+                </div>
+            `).join('');
+        }
+        renderTransactions();
+
+        // Paychecks
+        function addPaycheck() {
+            const period = document.getElementById('paycheckPeriod').value.trim();
+            const amount = parseFloat(document.getElementById('paycheckAmt').value);
+            if (!period || !amount) return;
+
+            store.paychecks.push({ period, amount, id: Date.now() });
+
+            // Also add as income transaction
+            store.transactions.push({
+                type: 'income', amount, desc: `Paycheck: ${period}`,
+                date: new Date().toLocaleDateString(), id: Date.now() + 1
+            });
+
+            saveStore(store);
+            renderPaychecks();
+            renderTransactions();
+            document.getElementById('paycheckPeriod').value = '';
+            document.getElementById('paycheckAmt').value = '';
+        }
+
+        function updatePaycheck(id, newAmount) {
+            const pc = store.paychecks.find(p => p.id === id);
+            if (pc) {
+                pc.amount = parseFloat(newAmount) || 0;
+                saveStore(store);
+            }
+        }
+
+        function renderPaychecks() {
+            const grid = document.getElementById('paycheckGrid');
+            if (store.paychecks.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No paychecks logged yet.</p>';
+                return;
+            }
+            grid.innerHTML = store.paychecks.map(p => `
+                <div class="paycheck-card">
+                    <div class="paycheck-period">${p.period}</div>
+                    <div class="paycheck-amount">
+                        $<input type="number" value="${p.amount}" onchange="updatePaycheck(${p.id}, this.value)">
+                    </div>
+                </div>
+            `).join('');
+        }
+        renderPaychecks();
+
+        // ============================================
+        // RELATIONSHIP SYSTEM
+        // ============================================
+        function pinNext(el, index) {
+            if (el.value.length === 1) {
+                const inputs = document.querySelectorAll('#pinInputs input');
+                if (index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            }
+        }
+
+        function unlockRelationship() {
+            const inputs = document.querySelectorAll('#pinInputs input');
+            const pin = Array.from(inputs).map(i => i.value).join('');
+            if (pin === store.relPin) {
+                document.getElementById('relLockScreen').style.display = 'none';
+                document.getElementById('relContent').classList.add('unlocked');
+            } else {
+                inputs.forEach(i => {
+                    i.value = '';
+                    i.style.borderColor = 'var(--accent-red)';
+                    setTimeout(() => i.style.borderColor = '', 1000);
+                });
+                inputs[0].focus();
+            }
+        }
+
+        function switchRelTab(tab) {
+            document.querySelectorAll('.rel-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.rel-tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById('relTab-' + tab).classList.add('active');
+        }
+
+        function selectCheckin(el, mood) {
+            document.querySelectorAll('.checkin-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            el.dataset.mood = mood;
+        }
+
+        function saveCheckin() {
+            const selected = document.querySelector('.checkin-option.selected');
+            const note = document.getElementById('checkinNote').value.trim();
+            if (!selected) return;
+
+            store.checkins.push({
+                mood: selected.dataset.mood,
+                note,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            });
+            saveStore(store);
+            renderCheckins();
+            document.getElementById('checkinNote').value = '';
+            document.querySelectorAll('.checkin-option').forEach(o => o.classList.remove('selected'));
+        }
+
+        function renderCheckins() {
+            const container = document.getElementById('checkinHistory');
+            container.innerHTML = [...store.checkins].reverse().slice(0, 10).map(c => `
+                <div class="memory-entry">
+                    <div class="memory-date">${c.mood} — ${c.date}</div>
+                    <div class="memory-text">${c.note || 'No notes added.'}</div>
+                </div>
+            `).join('');
+        }
+        renderCheckins();
+
+        function addPaigePref() {
+            const type = document.getElementById('paigePrefType').value;
+            const text = document.getElementById('paigePrefText').value.trim();
+            if (!text) return;
+
+            store.paigePrefs.push({ type, text, id: Date.now() });
+            saveStore(store);
+            renderPaigePrefs();
+            document.getElementById('paigePrefText').value = '';
+        }
+
+        function renderPaigePrefs() {
+            const container = document.getElementById('paigePrefs');
+            if (store.paigePrefs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🖤</div><p>Add details about what matters to Paige.</p></div>';
+                return;
+            }
+
+            const typeIcons = { likes: '💜', dislikes: '🚫', comfort: '🤗', important: '⭐' };
+            const typeColors = { likes: 'var(--accent-purple)', dislikes: 'var(--accent-red)', comfort: 'var(--accent-green)', important: 'var(--accent-amber)' };
+
+            container.innerHTML = store.paigePrefs.map(p => `
+                <div style="padding:10px 14px; background:var(--bg-input); border-left:3px solid ${typeColors[p.type]}; border-radius:0 var(--radius-sm) var(--radius-sm) 0; margin-bottom:8px; display:flex; align-items:center; gap:10px;">
+                    <span>${typeIcons[p.type]}</span>
+                    <span style="flex:1; font-size:14px;">${p.text}</span>
+                    <span class="tag tag-${p.type === 'likes' ? 'purple' : p.type === 'dislikes' ? 'red' : p.type === 'comfort' ? 'green' : 'amber'}">${p.type}</span>
+                </div>
+            `).join('');
+        }
+        renderPaigePrefs();
+
+        function addMemory() {
+            const text = document.getElementById('memoryText').value.trim();
+            if (!text) return;
+
+            store.memories.push({
+                text,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            });
+            saveStore(store);
+            renderMemories();
+            document.getElementById('memoryText').value = '';
+        }
+
+        function renderMemories() {
+            const container = document.getElementById('memoryLog');
+            if (store.memories.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div><p>No memories saved yet.</p></div>';
+                return;
+            }
+            container.innerHTML = [...store.memories].reverse().map(m => `
+                <div class="memory-entry">
+                    <div class="memory-date">${m.date}</div>
+                    <div class="memory-text">${m.text}</div>
+                </div>
+            `).join('');
+        }
+        renderMemories();
+
+        function addFuturePlan() {
+            const text = document.getElementById('futurePlanText').value.trim();
+            if (!text) return;
+
+            store.futurePlans.push({ text, done: false, id: Date.now() });
+            saveStore(store);
+            renderFuturePlans();
+            document.getElementById('futurePlanText').value = '';
+        }
+
+        function renderFuturePlans() {
+            const container = document.getElementById('futurePlans');
+            if (store.futurePlans.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🗓️</div><p>Add future plans and goals together.</p></div>';
+                return;
+            }
+            container.innerHTML = store.futurePlans.map(p => `
+                <div class="task-item ${p.done ? 'completed' : ''}" onclick="toggleFuturePlan(${p.id})">
+                    <div class="task-checkbox">${p.done ? '✓' : ''}</div>
+                    <span class="task-text">${p.text}</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleFuturePlan(id) {
+            const plan = store.futurePlans.find(p => p.id === id);
+            if (plan) {
+                plan.done = !plan.done;
+                saveStore(store);
+                renderFuturePlans();
+            }
+        }
+        renderFuturePlans();
+
+        function addGrowth(type) {
+            const inputId = type === 'your' ? 'yourGrowthInput' : 'togetherGrowthInput';
+            const text = document.getElementById(inputId).value.trim();
+            if (!text) return;
+
+            const key = type === 'your' ? 'yourGrowth' : 'togetherGrowth';
+            store[key].push({ text, done: false, id: Date.now() });
+            saveStore(store);
+            renderGrowth();
+            document.getElementById(inputId).value = '';
+        }
+
+        function toggleGrowth(type, id) {
+            const key = type === 'your' ? 'yourGrowth' : 'togetherGrowth';
+            const item = store[key].find(g => g.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveStore(store);
+                renderGrowth();
+            }
+        }
+
+        function renderGrowth() {
+            ['your', 'together'].forEach(type => {
+                const key = type === 'your' ? 'yourGrowth' : 'togetherGrowth';
+                const list = document.getElementById(type + 'GrowthList');
+                if (store[key].length === 0) {
+                    list.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">Nothing added yet.</p>';
+                    return;
+                }
+                list.innerHTML = store[key].map(g => `
+                    <div class="task-item ${g.done ? 'completed' : ''}" onclick="toggleGrowth('${type}', ${g.id})" style="margin-bottom:6px;">
+                        <div class="task-checkbox">${g.done ? '✓' : ''}</div>
+                        <span class="task-text">${g.text}</span>
+                    </div>
+                `).join('');
+            });
+        }
+        renderGrowth();
+
+        // ============================================
+        // AI SYSTEMS (Simulated — no API needed)
+        // ============================================
+        function sendAI() {
+            const input = document.getElementById('aiInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            const messages = document.getElementById('aiMessages');
+
+            // Add user message
+            messages.innerHTML += `
+                <div class="ai-message user">
+                    <div class="ai-avatar">K</div>
+                    <div class="ai-bubble">${val}</div>
+                </div>
+            `;
+
+            // Generate AI response
+            const response = generateAIResponse(val);
+
+            setTimeout(() => {
+                messages.innerHTML += `
+                    <div class="ai-message assistant">
+                        <div class="ai-avatar">🤖</div>
+                        <div class="ai-bubble">
+                            ${response}
+                            <div style="margin-top:10px; display:flex; gap:6px;">
+                                <button class="btn-secondary" style="padding:4px 10px; font-size:11px;" onclick="saveAIOutput(this)">⭐ Save</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
+            }, 500);
+
+            // Store in memory
+            store.aiMemory.push({ role: 'user', content: val, time: Date.now() });
+            saveStore(store);
+
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function generateAIResponse(input) {
+            const lower = input.toLowerCase();
+
+            // Resume / Writing
+            if (lower.includes('resume') || lower.includes('cover letter')) {
+                return `Here's a structure for your resume:<br><br>
+                <strong>Kayden — Office Admin / IT Focused</strong><br><br>
+                <strong>Summary:</strong> Motivated and disciplined professional with training in Office Administration through Job Corps. Skilled in computer operations, documentation, and communication. Seeking opportunities in IT support, delivery, or remote administration.<br><br>
+                <strong>Skills:</strong> Microsoft Office, Data Entry, Customer Service, Basic Networking, Troubleshooting, Time Management<br><br>
+                <strong>Experience:</strong> Add your WBL experience here with specific tasks and responsibilities.<br><br>
+                <strong>Education:</strong> Job Corps — Office Administration (Current)<br><br>
+                Want me to refine any section?`;
+            }
+
+            // Study / Learning
+            if (lower.includes('study') || lower.includes('learn') || lower.includes('what should i')) {
+                return `Here's a focused study plan based on your career paths:<br><br>
+                🔹 <strong>This Week:</strong> Complete 1 lesson in the Career section<br>
+                🔹 <strong>Daily:</strong> Spend 20 minutes on CompTIA A+ material (Professor Messer on YouTube — free)<br>
+                🔹 <strong>Practice:</strong> Open Command Prompt and practice: <code>ipconfig</code>, <code>ping</code>, <code>nslookup</code><br><br>
+                Small consistent steps beat long random sessions. 20 minutes daily > 3 hours once a week.`;
+            }
+
+            // Money / Income
+            if (lower.includes('money') || lower.includes('income') || lower.includes('earn') || lower.includes('side')) {
+                return `Here are realistic income moves for your situation:<br><br>
+                <strong>Right Now:</strong><br>
+                🔹 Delivery driving (DoorDash, UberEats) — flexible, start fast<br>
+                🔹 Sell skills on Fiverr (data entry, typing, basic tasks)<br><br>
+                <strong>Short Term (1-3 months):</strong><br>
+                🔹 Get CompTIA A+ → apply for help desk / IT support roles ($15-22/hr)<br>
+                🔹 Remote customer service jobs (search "remote" on Indeed)<br><br>
+                <strong>Key:</strong> Don't try everything. Pick ONE path and execute consistently.`;
+            }
+
+            // Coding
+            if (lower.includes('code') || lower.includes('programming') || lower.includes('html') || lower.includes('python') || lower.includes('debug')) {
+                return `For coding, here's your starter path:<br><br>
+                <strong>Start with:</strong> HTML + CSS (you're already hosting on GitHub!)<br>
+                <strong>Then:</strong> JavaScript (makes websites interactive)<br>
+                <strong>Then:</strong> Python (great for IT automation + cybersecurity)<br><br>
+                <strong>Free resources:</strong><br>
+                🔹 freeCodeCamp.org<br>
+                🔹 The Odin Project<br>
+                🔹 CS50 by Harvard (YouTube)<br><br>
+                Want help with a specific coding problem? Paste it in and I'll debug it.`;
+            }
+
+            // Distracted / Unmotivated
+            if (lower.includes('distract') || lower.includes('focus') || lower.includes('unmotivat') || lower.includes('lazy') || lower.includes('procrastinat')) {
+                return `Real talk — distraction is normal. Here's what works:<br><br>
+                <strong>Right now:</strong><br>
+                1. Close every tab and app except what you need<br>
+                2. Set a 20-minute timer<br>
+                3. Do ONE thing. Not everything — one thing<br><br>
+                <strong>The rule:</strong> You don't need motivation. You need a system. That's why you built KAYDEN OS.<br><br>
+                Go to your Habits tab and check off what you've done today. Momentum builds momentum.`;
+            }
+
+            // Paige / Relationship
+            if (lower.includes('paige') || lower.includes('girlfriend') || lower.includes('relationship')) {
+                return `Check your Relationship section — it has tools built specifically for this.<br><br>
+                Quick reminders:<br>
+                🖤 Be consistent, not perfect<br>
+                🖤 Listen more than you talk<br>
+                🖤 Small daily efforts > grand gestures<br>
+                🖤 Respond, don't react<br><br>
+                Being stable and reliable IS the most attractive thing you can do.`;
+            }
+
+            // Feeling down
+            if (lower.includes('stressed') || lower.includes('anxious') || lower.includes('overwhelm') || lower.includes('sad') || lower.includes('angry') || lower.includes('frustrated')) {
+                return `Pause. Take a breath. Here's what's real:<br><br>
+                🔹 You're building something most people never start<br>
+                🔹 Feeling overwhelmed means you care<br>
+                🔹 You don't have to fix everything today<br><br>
+                <strong>Right now, do this:</strong><br>
+                1. Name the feeling (just acknowledge it)<br>
+                2. Take 5 slow breaths<br>
+                3. Pick the smallest possible next step<br>
+                4. Do just that<br><br>
+                You're not behind. You're building.`;
+            }
+
+            // Business ideas
+            if (lower.includes('business') || lower.includes('idea') || lower.includes('hustle') || lower.includes('startup')) {
+                return `Based on your skills and situation, here are realistic ideas:<br><br>
+                <strong>Low Effort:</strong><br>
+                🔹 Local computer repair / cleanup service<br>
+                🔹 Tech setup for older adults<br>
+                🔹 Delivery driving (build capital)<br><br>
+                <strong>Medium Effort:</strong><br>
+                🔹 Remote IT support (freelance on Upwork)<br>
+                🔹 Simple websites for local businesses ($200-500 each)<br>
+                🔹 Data entry / virtual assistant<br><br>
+                <strong>Long Term:</strong><br>
+                🔹 Cybersecurity consulting<br>
+                🔹 IT managed services<br><br>
+                Pick one that excites you and take the first step THIS WEEK.`;
+            }
+
+            // Default
+            return `I hear you. Here's what I'd suggest:<br><br>
+            Based on what you said, the best move is to <strong>take one clear action</strong> right now. Not tomorrow — now.<br><br>
+            Use your systems:<br>
+            🔹 Check your <strong>Tasks</strong> — is anything overdue?<br>
+            🔹 Check your <strong>Habits</strong> — what haven't you done today?<br>
+            🔹 Check your <strong>Career path</strong> — is there a lesson waiting?<br><br>
+            You've got the tools. Use them. I'm here if you need more direction.`;
+        }
+
+        function saveAIOutput(btn) {
+            const bubble = btn.closest('.ai-bubble');
+            const text = bubble.innerText.replace('⭐ Save', '').trim();
+            store.aiSaved.push({ text: text.substring(0, 200) + '...', time: Date.now() });
+            saveStore(store);
+            btn.textContent = '✓ Saved';
+            btn.style.color = 'var(--accent-green)';
+            renderSavedOutputs();
+        }
+
+        function renderSavedOutputs() {
+            const container = document.getElementById('savedOutputs');
+            if (store.aiSaved.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">⭐</div><p>Star any AI response to save it here.</p></div>';
+                return;
+            }
+            container.innerHTML = store.aiSaved.map(s => `
+                <div class="memory-entry" style="border-left-color:var(--accent-amber);">
+                    <div class="memory-date">${new Date(s.time).toLocaleDateString()}</div>
+                    <div class="memory-text">${s.text}</div>
+                </div>
+            `).join('');
+        }
+        renderSavedOutputs();
+
+        // ============================================
+        // LIFE ASSISTANT (Different personality)
+        // ============================================
+        function sendAssistant() {
+            const input = document.getElementById('assistantInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            const messages = document.getElementById('assistantMessages');
+
+            messages.innerHTML += `
+                <div class="ai-message user">
+                    <div class="ai-avatar">K</div>
+                    <div class="ai-bubble">${val}</div>
+                </div>
+            `;
+
+            const response = generateAssistantResponse(val);
+
+            setTimeout(() => {
+                messages.innerHTML += `
+                    <div class="ai-message assistant">
+                        <div class="ai-avatar">🎯</div>
+                        <div class="ai-bubble">${response}</div>
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
+            }, 400);
+
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function generateAssistantResponse(input) {
+            const lower = input.toLowerCase();
+
+            if (lower.includes('study') || lower.includes('learn')) {
+                return `💡 <strong>Action:</strong> Go to Career Paths → pick a lesson → spend 20 minutes.<br><br>Don't overthink it. Just open one and start. That's all it takes today.`;
+            }
+
+            if (lower.includes('distract') || lower.includes('bored') || lower.includes('unfocused')) {
+                return `🔒 Lock in. Here's your 3-step reset:<br><br>1. Close everything except KAYDEN OS<br>2. Go to Habits → check off what you've done<br>3. Pick ONE task and set a 15-min timer<br><br>Distraction loses when you have a system.`;
+            }
+
+            if (lower.includes('money') || lower.includes('broke') || lower.includes('earn')) {
+                return `💰 Go to the Money section and log everything you have right now.<br><br>Then ask the AI Hub: "How can I make money with my skills?" — it'll give you a solid plan.<br><br>Clarity beats stress.`;
+            }
+
+            if (lower.includes('motivat') || lower.includes('tired') || lower.includes('give up')) {
+                return `🔥 You don't need motivation. You need momentum.<br><br>Do ONE small thing right now — check a habit, complete a task, read a lesson. Action creates energy, not the other way around.<br><br>You're still here. That counts.`;
+            }
+
+            if (lower.includes('paige') || lower.includes('relationship')) {
+                return `🖤 Go to the Relationship section. Do one thing from the Connection Reminders.<br><br>Consistency > intensity. She'll notice the steady effort more than any big gesture.`;
+            }
+
+            return `Here's what I suggest based on that:<br><br>
+            1. Check your <strong>Today Screen</strong> — see what's pending<br>
+            2. Complete one <strong>habit</strong> you haven't done yet<br>
+            3. If you need direction, use the <strong>AI Hub</strong><br><br>
+            You've got all the tools. Pick one and use it. 💪`;
+        }
+
+        // ============================================
+        // MOBILE HELPERS
+        // ============================================
+        function toggleMobileMore() {
+            // Cycle through hidden pages on mobile
+            const hiddenPages = ['jobcorps', 'relationship', 'assistant'];
+            const currentPage = document.querySelector('.page.active').id.replace('page-', '');
+
+            if (hiddenPages.includes(currentPage)) {
+                const nextIdx = (hiddenPages.indexOf(currentPage) + 1) % hiddenPages.length;
+                navigate(hiddenPages[nextIdx]);
+            } else {
+                navigate(hiddenPages[0]);
+            }
+        }
+
+        // ============================================
+        // INITIAL LOAD
+        // ============================================
+        console.log('%c KAYDEN OS ', 'background: linear-gradient(135deg, #dc3545, #8b5cf6); color: white; font-size: 20px; font-weight: 900; padding: 10px 20px; border-radius: 8px;');
+        console.log('%c System initialized. All modules loaded.', 'color: #8888a0; font-size: 12px;');
+
+    </script>
+
+</body>
+</html>
